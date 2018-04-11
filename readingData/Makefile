@@ -5,7 +5,7 @@ CPPFLAGS = -g -Wall
 
 
 readData : $(OBJS)
-	$(CC) -o readData $(OBJS)
+	$(CC) $(LFLAGS) -o readData $(OBJS)
 
 readData.o : 
 	g++ $(CPPFLAGS) -c readData.cpp
