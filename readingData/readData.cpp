@@ -2,6 +2,7 @@
 #include <math.h>
 
 #include <fstream>
+#include <sstream>
 
 #include <vector>
 
@@ -48,23 +49,25 @@ std::vector<std::vector<int> > loadFile() {
         exit(-1);
     }
     cout << "Is it gonna go?\n";
-    while (getline(allDta, dtaLine) && getline(allIdx, idxLine)) {
+    while (getline(allDta, dtaLine)) {
+        if(getline(allIdx, idxLine)){
+                memcpy(indChars, idxLine.c_str(), MAX_CHARS);
+                index = atoi(indChars);
+                counter ++;
+                
         
-        memcpy(indChars, idxLine.c_str(), MAX_CHARS);
-        index = atoi(indChars);
-        counter ++;
-        
+                if(index == 1) {
+                    istringstream iss(dtaLine);
+                    iss >> userId >> movieId >> dateNum >> rating;
+                    outputArray[userId][movieId] = rating;
+                    if(counter % 10000000 == 0) {cout << counter << endl;}
+                    }
 
-        if(index ==1) {
-            memcpy(c_line, dtaLine.c_str(), MAX_CHARS);
-            userId = atoi(strtok(c_line, " "));
-            movieId = atoi(strtok(NULL, " "));
-            dateNum = atoi(strtok(NULL, " "));
-            rating = atoi(strtok(NULL, " "));
-            outputArray[userId][movieId] = rating;
             
 
         }
+        
+        
     }
     allIdx.close();
     allDta.close();
@@ -76,6 +79,14 @@ int main(int argc, char const *argv[])
 {
     cout << "it started.";
     std::vector<std::vector<int> > test = loadFile();
-    cout << test[10135][2105];
+    for(int i = 1; i < 17772; i++) {
+        if (test[1][i] > 0)
+        {
+            cout << i << endl;
+            cout << test[1][i] << endl;
+
+            break;
+        }
+    }
     return 0;
 }
