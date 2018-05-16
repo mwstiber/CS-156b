@@ -1,6 +1,4 @@
-﻿/*
-Author: Guang Yang
-*/
+
 //Header file of the class SVD.
 #ifndef SVD_H_INCLUDED
 #define SVD_H_INCLUDED
