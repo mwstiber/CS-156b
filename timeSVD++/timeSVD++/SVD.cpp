@@ -1,6 +1,3 @@
-/*
-Author: Guang Yang
-*/
 //This file is the implementation of the class SVD.
 #include <cmath>
 #include <iostream>
