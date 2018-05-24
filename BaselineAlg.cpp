@@ -56,7 +56,7 @@ std::vector<std::vector<int> > loadFileTrain() {
             index = atoi(indChars);
             counter ++;
             
-            if(index < 3) {
+            if(index == 1) {
                 istringstream iss(dtaLine);
                 iss >> userId >> movieId >> dateNum >> rating;
                 outputArray[userId][movieId] = rating;
@@ -208,7 +208,7 @@ int main(int argc, char const *argv[])
     predict = loadFileTest(totAvg, userAvg, movieAvg);
     
     ofstream outputFile;
-    outputFile.open("baselineR.txt");
+    outputFile.open("baselineRTry2.txt");
     
     for (int ind = 0; ind < predict.size(); ind++) {
         outputFile << predict[ind] << endl;
