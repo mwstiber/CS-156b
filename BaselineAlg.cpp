@@ -41,13 +41,13 @@ std::vector<std::vector<int> > loadFileTrain() {
     ifstream allDta ("./um/all.dta");
     if(allDta.fail()) {
         cout << "all.dta not correctly imported Train";
-        exit(-1);
+        //exit(-1);
     }
     
     ifstream allIdx ("./um/all.idx");
     if(allIdx.fail()) {
         cout << "all.idx not correctly imported";
-        exit(-1);
+        //exit(-1);
     }
     cout << "Is it gonna go?\n";
     while (getline(allDta, dtaLine)) {
@@ -56,7 +56,7 @@ std::vector<std::vector<int> > loadFileTrain() {
             index = atoi(indChars);
             counter ++;
             
-            if(index < 3) {
+            if(index == 1) {
                 istringstream iss(dtaLine);
                 iss >> userId >> movieId >> dateNum >> rating;
                 outputArray[userId][movieId] = rating;
@@ -109,7 +109,7 @@ std::vector<double> loadFileTest(double totAvg, std::vector<double> user, std::v
                 uTend = user[userId - 1] - totAvg;
                 mTend = movie[movieId - 1] - totAvg;
                 test.push_back(totAvg + (0.7 * uTend) + (0.5 * mTend));
-                if(counter % 10000000 == 0) {cout << counter << endl;}
+                if(counter % 10000000 == 2) {cout << counter << endl;}
             }
             
         }
@@ -165,27 +165,19 @@ double findAverageReview() {
     return (double)currTot / (double)counter;
 }
 
-double findAvgPer (std::vector<std::vector<int> > data, int per, int isUser) {
+double findAvgPer (std::vector<int> data) {
     int avg = 0;
     int count = 0;
-    
-    if (isUser == 1) {
-        for (int i = 0; i < data[per].size(); i++) {
-            if (data[per][i] != 0) {
-                avg += data[per][i];
-                count += 1;
-            }
+
+    for (int i = 0; i < data.size(); i++) {
+        if (data[i] != 0) {
+            avg += data[i];
+            count += 1;
         }
     }
-    else {
-        for (int i = 0; i < data.size(); i++) {
-            if (data[i][per] != 0) {
-                avg += data[i][per];
-                count += 1;
-            }
-        }
-    }
+
     if (count != 0) {
+        
         return (double) avg / (double) count;
     }
     
@@ -203,19 +195,28 @@ int main(int argc, char const *argv[])
 
     printf("ThisStepDone");
     
-    for (int i = 0; i < train.size(); i++) {
-        userAvg.push_back(findAvgPer(train, i, 1));
+    for (int i = 0; i < NUM_USERS; i++) {
+        userAvg.push_back(findAvgPer(train[i]));
     }
     
-    for (int j = 0; j < train[1].size(); j++) {
-        movieAvg.push_back(findAvgPer(train, j, 0));
+    for (int j = 0; j < NUM_MOVIES; j++) {
+        std::vector<int> temp;
+        for (int i = 0; i < NUM_USERS; i++) {
+            temp.push_back(train[i][j]);
+        }
+        movieAvg.push_back(findAvgPer(temp));
     }
     
     predict = loadFileTest(totAvg, userAvg, movieAvg);
     
+    ofstream outputFile;
+    outputFile.open("baselineRTry2.txt");
+    
     for (int ind = 0; ind < predict.size(); ind++) {
-        printf("%f", predict[ind]);
+        outputFile << predict[ind] << endl;
     }
+    
+    outputFile.close();
     
     return 0;
 }

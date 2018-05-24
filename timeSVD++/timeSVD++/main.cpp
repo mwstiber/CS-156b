@@ -1,6 +1,4 @@
-/*
-Author: Guang Yang
-*/
+
 //This file is used to generate predictions.
 #include <cmath>
 #include <iostream>
