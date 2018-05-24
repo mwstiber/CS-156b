@@ -33,7 +33,7 @@ std::vector<std::vector<int> > loadFile() {
     string idxLine;
     int index;
     int userId, movieId, dateNum, rating;
-    char c_line[MAX_CHARS];
+    //char c_line[MAX_CHARS];
     char indChars[MAX_CHARS];
     int counter = 0;
 
@@ -82,7 +82,7 @@ int findAverageReview() {
     string idxLine;
     int index;
     int userId, movieId, dateNum, rating;
-    char c_line[MAX_CHARS];
+    //char c_line[MAX_CHARS];
     char indChars[MAX_CHARS];
     int counter = 0;
     int currTot = 0;
@@ -129,10 +129,101 @@ int findAverageReview() {
 
 }
 
+
+void createNewFile(string outFileName) {
+
+
+    string dtaLine;
+    string idxLine;
+    int index;
+    int userId, movieId, dateNum, rating;
+    //char c_line[MAX_CHARS];
+    char indChars[MAX_CHARS];
+    int counter = 0;
+
+
+
+    int numTraining = 0;
+
+
+    
+    ifstream allIdx2 ("../um/all.idx");
+    if(allIdx2.fail()) {
+        cout << "all.idx not correctly imported";
+        exit(-1);
+    }
+
+
+
+
+    while(getline(allIdx2, idxLine)) {
+        memcpy(indChars, idxLine.c_str(), MAX_CHARS);
+        index = atoi(indChars);
+        if(index <= 4){
+            numTraining += 1;
+        }
+    }
+
+    ofstream fout(outFileName.c_str());
+    fout << NUM_USERS << " " << NUM_MOVIES << " " << numTraining << endl;
+    allIdx2.close();
+
+    ifstream allDta ("../um/all.dta");
+    if(allDta.fail()) {
+        cout << "all.dta not correctly imported";
+        exit(-1);
+    }
+    
+    ifstream allIdx ("../um/all.idx");
+    if(allIdx.fail()) {
+        cout << "all.idx not correctly imported";
+        exit(-1);
+    }
+    cout << "Is it gonna go?\n";
+    while (getline(allDta, dtaLine)) {
+        if(getline(allIdx, idxLine)){
+                memcpy(indChars, idxLine.c_str(), MAX_CHARS);
+                index = atoi(indChars);
+                counter ++;
+                
+        
+                if(index == 1) {
+                    istringstream iss(dtaLine);
+                    iss >> userId >> movieId >> dateNum >> rating;
+                    fout << userId << " " << movieId << " " << rating << endl;
+                    if(counter % 10000000 == 0) {cout << counter << endl;}
+                    }
+
+            
+
+        }
+        
+        
+    }
+    allIdx.close();
+    allDta.close();
+    
+    
+
+               
+    
+                
+
+            
+
+    
+        
+        
+}
+
 int main(int argc, char const *argv[])
 {
     cout << "it started.";
     
-    cout << "The average review was: " << findAverageReview() << endl;
+    createNewFile("../um/graphChiTraining.dta");
+    // ifstream ifs ("../um/graphChiTraining.dta");
+    // string lin;
+    // if(getline(ifs, lin))
+    //     cout << lin;
     return 0;
 }

@@ -38,13 +38,13 @@ std::vector<std::vector<int> > loadFileTrain() {
     char indChars[MAX_CHARS];
     int counter = 0;
     
-    ifstream allDta ("../um/all.dta.txt");
+    ifstream allDta ("./um/all.dta");
     if(allDta.fail()) {
         cout << "all.dta not correctly imported Train";
         exit(-1);
     }
     
-    ifstream allIdx ("../um/all.idx");
+    ifstream allIdx ("./um/all.idx");
     if(allIdx.fail()) {
         cout << "all.idx not correctly imported";
         exit(-1);
@@ -85,13 +85,13 @@ std::vector<double> loadFileTest(double totAvg, std::vector<double> user, std::v
     double uTend;
     double mTend;
     
-    ifstream allDta ("../um/all.dta");
+    ifstream allDta ("./um/all.dta");
     if(allDta.fail()) {
         cout << "all.dta not correctly imported Test";
         exit(-1);
     }
     
-    ifstream allIdx ("../um/all.idx");
+    ifstream allIdx ("./um/all.idx");
     if(allIdx.fail()) {
         cout << "all.idx not correctly imported";
         exit(-1);
@@ -133,13 +133,13 @@ double findAverageReview() {
     int counter = 0;
     int currTot = 0;
     
-    ifstream allDta ("../um/all.dta");
+    ifstream allDta ("./um/all.dta");
     if(allDta.fail()) {
         cout << "all.dta not correctly imported";
         exit(-1);
     }
     
-    ifstream allIdx ("../um/all.idx");
+    ifstream allIdx ("./um/all.idx");
     if(allIdx.fail()) {
         cout << "all.idx not correctly imported";
         exit(-1);
@@ -200,6 +200,8 @@ int main(int argc, char const *argv[])
 
     std::vector<std::vector<int> > train = loadFileTrain();
     double totAvg = findAverageReview();
+
+    printf("ThisStepDone");
     
     for (int i = 0; i < train.size(); i++) {
         userAvg.push_back(findAvgPer(train, i, 1));

@@ -20,7 +20,7 @@ int main() {
     string trainFile = "train.txt";  //set train data
     string crossFile = "cross.txt";  //set cross validation data
     string testFile = "../../um/qual.dta";  //set test data
-    string outFile = "testTwo.txt";  //set output data
+    string outFile = "testFive.txt";  //set output data
     FILE *fp = fopen("../../um/all.dta","r");
     FILE *ft = fopen("train.txt","w");
     FILE *fc = fopen("cross.txt","w");
@@ -43,7 +43,7 @@ int main() {
                 memcpy(indChars, idxLine.c_str(), 15);
                 index = atoi(indChars);
                 counter ++;
-                if(rand()%100==0) {
+                if(rand()%100 < 2) {
                     cvOnThis = true;
                 }
                 else
@@ -53,9 +53,9 @@ int main() {
                 break;
         }
         
-        if(index <= 3){
+        if(index <= 4){
             if (cvOnThis) {
-                           //use 1% random train data for cross validation
+                           //use 2%, valid for cross validation
                 if(count % 4 == 3)
                     fprintf(fc,"%s\n",s);
                 else
@@ -72,6 +72,7 @@ int main() {
         count++;
                     
     }
+    cout << "Importing done." << endl;
     fclose(fp);
     fclose(ft);
     fclose(fc);

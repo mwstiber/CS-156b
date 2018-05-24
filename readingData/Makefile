@@ -12,3 +12,10 @@ readData.o :
 
 clean :
 	rm -f core readData $(OBJS)
+
+all : readData
+
+run : readData
+	./readData
+
+.PHONY : all clean run

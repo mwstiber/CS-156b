@@ -18,7 +18,7 @@ using namespace std;
 const int userNum = 458293;  //number of users
 const int itemNum = 17770;   //number of items
 const int timeNum = 2243;    //number of days(time)
-const int binNum = 25;       //number of time bins
+const int binNum = 20;       //number of time bins
 const double AVG = 3.608614;  //average score
 double G_alpha = 0.00001;        //gamma for alpha
 const double L_alpha = 0.0004;   //learning rate for alpha
@@ -45,6 +45,7 @@ int SVD::CalBin(int timeArg) {
 //main function for training
 //terminate when RMSE varies less than 0.00005
 double SVD::MyTrain() {
+    cout << "Starting to train." << endl;
     double preRmse = 1000;
     ofstream fout(outFile.c_str());
     srand(time(NULL));
