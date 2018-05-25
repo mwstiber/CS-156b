@@ -130,7 +130,7 @@ int findAverageReview() {
 }
 
 
-void createNewFile(string outFileName) {
+void createNewFile(string outFileName, string outFileName2) {
 
 
     string dtaLine;
@@ -144,6 +144,7 @@ void createNewFile(string outFileName) {
 
 
     int numTraining = 0;
+    int numValidation = 0;
 
 
     
@@ -159,13 +160,20 @@ void createNewFile(string outFileName) {
     while(getline(allIdx2, idxLine)) {
         memcpy(indChars, idxLine.c_str(), MAX_CHARS);
         index = atoi(indChars);
-        if(index <= 4){
+        if(index != 2 && index != 5){
             numTraining += 1;
+        }
+        else {
+            numValidation += 1;
         }
     }
 
     ofstream fout(outFileName.c_str());
+    ofstream fout2(outFileName2.c_str());
+    fout << "%%MatrixMarket matrix coordinate real"  << endl;
+    fout2 << "%%MatrixMarket matrix coordinate real"  << endl;
     fout << NUM_USERS << " " << NUM_MOVIES << " " << numTraining << endl;
+    fout2 << NUM_USERS << " " << NUM_MOVIES << " " << numValidation << endl;
     allIdx2.close();
 
     ifstream allDta ("../um/all.dta");
@@ -182,20 +190,23 @@ void createNewFile(string outFileName) {
     cout << "Is it gonna go?\n";
     while (getline(allDta, dtaLine)) {
         if(getline(allIdx, idxLine)){
-                memcpy(indChars, idxLine.c_str(), MAX_CHARS);
-                index = atoi(indChars);
-                counter ++;
-                
-        
-                if(index == 1) {
-                    istringstream iss(dtaLine);
-                    iss >> userId >> movieId >> dateNum >> rating;
-                    fout << userId << " " << movieId << " " << rating << endl;
-                    if(counter % 10000000 == 0) {cout << counter << endl;}
-                    }
-
+            memcpy(indChars, idxLine.c_str(), MAX_CHARS);
+            index = atoi(indChars);
+            counter ++;
             
-
+    
+            if(index != 2 && index != 5) {
+                istringstream iss(dtaLine);
+                iss >> userId >> movieId >> dateNum >> rating;
+                fout << userId << " " << movieId << " " << rating << endl;
+                if(counter % 10000000 == 0) {cout << counter << endl;}
+            }
+            else if(index == 2) {
+                istringstream iss(dtaLine);
+                iss >> userId >> movieId >> dateNum >> rating;
+                fout2 << userId << " " << movieId << " " << rating << endl;
+                if(counter % 10000000 == 0) {cout << counter << endl;}
+            }
         }
         
         
@@ -216,14 +227,111 @@ void createNewFile(string outFileName) {
         
 }
 
+void createNewFilewTest(string outFileName, string outFileName2) {
+
+
+    string dtaLine;
+    string idxLine;
+    int index;
+    int userId, movieId, dateNum, rating;
+    //char c_line[MAX_CHARS];
+    char indChars[MAX_CHARS];
+    int counter = 0;
+
+
+
+    int numTraining = 0;
+    int numValidation = 0;
+
+
+    
+    ifstream allIdx2 ("../um/all.idx");
+    if(allIdx2.fail()) {
+        cout << "all.idx not correctly imported";
+        exit(-1);
+    }
+
+
+
+
+    while(getline(allIdx2, idxLine)) {
+        memcpy(indChars, idxLine.c_str(), MAX_CHARS);
+        index = atoi(indChars);
+        if(index <= 4){
+            numTraining += 1;
+        }
+        else {
+            numValidation += 1;
+        }
+    }
+    string a = "%%MatrixMarket matrix coordinate real";
+    ofstream fout(outFileName.c_str());
+    ofstream fout2(outFileName2.c_str());
+    fout << a  << endl;
+    fout2 << a  << endl;
+    fout << NUM_USERS << " " << NUM_MOVIES << " " << numTraining << endl;
+    fout2 << NUM_USERS << " " << NUM_MOVIES << " " << numValidation << endl;
+    allIdx2.close();
+
+    ifstream allDta ("../um/all.dta");
+    if(allDta.fail()) {
+        cout << "all.dta not correctly imported";
+        exit(-1);
+    }
+    
+    ifstream allIdx ("../um/all.idx");
+    if(allIdx.fail()) {
+        cout << "all.idx not correctly imported";
+        exit(-1);
+    }
+    cout << "Is it gonna go?\n";
+    while (getline(allDta, dtaLine)) {
+        if(getline(allIdx, idxLine)){
+            memcpy(indChars, idxLine.c_str(), MAX_CHARS);
+            index = atoi(indChars);
+            counter ++;
+            
+    
+            if(index <= 4) {
+                istringstream iss(dtaLine);
+                iss >> userId >> movieId >> dateNum >> rating;
+                fout << userId << " " << movieId << " " << rating << endl;
+                if(counter % 10000000 == 0) {cout << counter << endl;}
+            }
+            else if(index == 5) {
+                istringstream iss(dtaLine);
+                iss >> userId >> movieId >> dateNum >> rating;
+                fout2 << userId << " " << movieId << " " << rating << endl;
+                if(counter % 10000000 == 0) {cout << counter << endl;}
+            }
+        }
+        
+        
+    }
+    allIdx.close();
+    allDta.close();
+        
+}
+
 int main(int argc, char const *argv[])
 {
-    cout << "it started.";
+    cout << "it started." << endl;
     
-    createNewFile("../um/graphChiTraining.dta");
-    // ifstream ifs ("../um/graphChiTraining.dta");
-    // string lin;
-    // if(getline(ifs, lin))
-    //     cout << lin;
+    // createNewFile("../um/netflixTraining.dta", "../um/netflixValidation.dta");
+    // createNewFilewTest("../um/netflixTrainingAll.dta", "../um/netflixTest.dta");
+    
+    ifstream ifs ("../um/netflixTrainingAll.dta");
+    string lin;
+    for(int i = 0; i < 15; i++) {
+        if(getline(ifs, lin))
+            cout << lin << endl;
+    }
+    cout << "#2" << endl;
+    ifstream ifs2 ("../um/netflixTrainingtest.dta");
+    string lin2;
+    for(int i = 0; i < 15; i++) {
+        if(getline(ifs2, lin2))
+            cout << lin2 << endl;
+    }
     return 0;
 }

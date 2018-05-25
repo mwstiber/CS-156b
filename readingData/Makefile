@@ -3,6 +3,9 @@ CC = g++
 CPPFLAGS = -g -Wall
 
 
+test : test.o mmio.o
+	gcc -o test $^
+
 
 readData : $(OBJS)
 	$(CC) $(LFLAGS) -o readData $(OBJS)
@@ -19,3 +22,4 @@ run : readData
 	./readData
 
 .PHONY : all clean run
+
