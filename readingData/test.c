@@ -49,7 +49,10 @@ int main()
                 printf("%d\n", rating);
         }
         else {
-            fprintf(fp2, "%d %d\n", userId, itemId);
+            fprintf(fp2, "%d %d %d\n", userId, itemId, rating);
+            if(itemId > 17770) {
+                printf("%d\n", itemId);
+            }
         }
         
     }

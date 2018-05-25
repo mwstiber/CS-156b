@@ -6,6 +6,9 @@ CPPFLAGS = -g -Wall
 test : test.o mmio.o
 	gcc -o test $^
 
+convert : convertToValidPrediction.o 
+	gcc -o convert $^
+
 
 readData : $(OBJS)
 	$(CC) $(LFLAGS) -o readData $(OBJS)
